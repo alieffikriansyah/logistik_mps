@@ -206,4 +206,21 @@ class Barang extends CI_Controller
         $query = $this->admin->cekStok($id);
         output_json($query);
     }
+
+    public function export_excel()
+    {
+        $jenis_filter = $this->input->get('jenis_filter');
+        $data['barang'] = $this->admin->getBarang($jenis_filter);
+        $data['selected_jenis'] = $jenis_filter;
+
+        $filename = "Data_Barang_" . date('Ymd_His') . ".xls";
+
+        header("Content-Type: application/vnd.ms-excel; charset=utf-8");
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Cache-Control: max-age=0");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $this->load->view('barang/export_excel', $data);
+    }
 }

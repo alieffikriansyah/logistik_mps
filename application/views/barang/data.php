@@ -80,7 +80,9 @@
                                         alt="Foto <?= $b['nama_barang']; ?>" 
                                         class="img-thumbnail" 
                                         style="width: 60px; height: 60px; object-fit: cover;"
-                                        title="<?= $b['foto_barang']; ?>">
+                                        title="<?= $b['foto_barang']; ?>"
+                                        crossorigin="anonymous"
+                                        data-fullpath="<?= base_url('assets/uploads/fotobarang/' . $b['foto_barang']); ?>">
                                 <?php else : ?>
                                     <span class="badge badge-secondary">No Image</span>
                                 <?php endif; ?>
@@ -178,5 +180,138 @@ document.getElementById('jenis_filter').addEventListener('change', function() {
     if (this.value) {
         this.form.submit();
     }
+});
+</script>
+
+<!-- =========================================================
+     DataTable Buttons: Copy, CSV, Excel, PDF, Print
+     - Print & PDF  : foto disuntik ulang secara manual (default
+                       DataTables Buttons hanya ambil teks sel,
+                       makanya <img> selalu kosong kalau dibiarkan default)
+     - Excel        : diarahkan ke endpoint PHP server-side supaya
+                       foto ASLI ter-embed di file .xlsx
+     - destroy()    : mencegah popup "Cannot reinitialise DataTable"
+                       kalau ada init lain di file layout/footer
+     ========================================================= -->
+<script>
+// Helper: convert <img> yang sudah termuat jadi base64 (dipakai untuk PDF)
+function getBase64FromImg(imgEl) {
+    if (!imgEl || !imgEl.complete || imgEl.naturalWidth === 0) return null;
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = imgEl.naturalWidth;
+        canvas.height = imgEl.naturalHeight;
+        canvas.getContext('2d').drawImage(imgEl, 0, 0);
+        return canvas.toDataURL('image/jpeg', 0.8);
+    } catch (e) {
+        console.warn('Gagal convert gambar ke base64 (kemungkinan CORS):', e);
+        return null;
+    }
+}
+
+$(document).ready(function () {
+    // Kolom (index dari 0):
+    // 0 No | 1 ID Barang | 2 Nama Barang | 3 Merk | 4 Jenis Barang
+    // 5 Stok | 6 Satuan | 7 Lokasi | 8 Foto Barang | 9 Aksi
+
+    // Cegah popup "Cannot reinitialise DataTable" kalau elemen #dataTable
+    // sudah pernah di-init sebelumnya (misal oleh script lain di layout/footer)
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+        $('#dataTable').DataTable().destroy();
+    }
+
+    var table = $('#dataTable').DataTable({
+        dom: "<'row px-2 px-md-4 pt-2'<'col-md-3'l><'col-md-5 text-center'B><'col-md-4'f>>" +
+             "<'row'<'col-md-12'tr>>" +
+             "<'row px-2 px-md-4 py-3'<'col-md-5'i><'col-md-7'p>>",
+        lengthMenu: [
+            [5, 10, 25, 50, 100, -1],
+            [5, 10, 25, 50, 100, "All"]
+        ],
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                text: 'Copy',
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7] } // teks saja, tanpa Foto & Aksi
+            },
+            {
+                extend: 'csvHtml5',
+                text: 'CSV',
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7] }
+            },
+            {
+                text: '<i class="fa fa-file-excel"></i> Excel',
+                className: 'dt-button buttons-excel',
+                action: function () {
+                    var selectedJenis = $('#jenis_filter').val() || '';
+                    window.location.href = '<?= base_url("barang/export_excel") ?>?jenis_filter=' + encodeURIComponent(selectedJenis);
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                text: 'PDF',
+                orientation: 'landscape',
+                pageSize: 'A4',
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] }, // Foto ikut, Aksi tidak
+                customize: function (doc) {
+                    doc.defaultStyle.fontSize = 8;
+                    doc.styles.tableHeader.fontSize = 9;
+
+                    var tableBody = doc.content[1].table.body;
+                    var fotoColIndex = 8; // posisi kolom Foto di hasil export
+                    var bodyRows = document.querySelectorAll('#dataTable tbody tr');
+
+                    for (var i = 1; i < tableBody.length; i++) {
+                        var trEl = bodyRows[i - 1];
+                        if (!trEl) continue;
+
+                        var tdList = trEl.querySelectorAll('td');
+                        var imgEl = tdList[8] ? tdList[8].querySelector('img') : null;
+                        var base64 = getBase64FromImg(imgEl);
+
+                        tableBody[i][fotoColIndex] = base64
+                            ? { image: base64, width: 30, height: 30 }
+                            : { text: 'No Image', italics: true, color: '#999999', fontSize: 7 };
+                    }
+
+                    doc.content[1].table.widths = ['3%', '10%', '18%', '13%', '13%', '7%', '7%', '13%', '10%'];
+                }
+            },
+            {
+                extend: 'print',
+                text: 'Print',
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] }, // Foto ikut, Aksi tidak
+                customize: function (win) {
+                    // Ambil semua src foto dari tabel asli (urutan baris sama dengan yang tampil)
+                    var sources = [];
+                    document.querySelectorAll('#dataTable tbody tr').forEach(function (tr) {
+                        var img = tr.querySelectorAll('td')[8] ? tr.querySelectorAll('td')[8].querySelector('img') : null;
+                        sources.push(img ? img.getAttribute('data-fullpath') : null);
+                    });
+
+                    // Cari kolom "Foto Barang" di jendela print, lalu suntik <img> manual
+                    var printTable = win.document.querySelector('table');
+                    var headerCells = printTable.querySelectorAll('thead th');
+                    var fotoColIdx = -1;
+                    headerCells.forEach(function (th, idx) {
+                        if (th.textContent.trim() === 'Foto Barang') fotoColIdx = idx;
+                    });
+
+                    if (fotoColIdx > -1) {
+                        var rows = printTable.querySelectorAll('tbody tr');
+                        rows.forEach(function (row, i) {
+                            var cell = row.querySelectorAll('td')[fotoColIdx];
+                            if (cell && sources[i]) {
+                                cell.innerHTML =
+                                    '<img src="' + sources[i] + '" style="width:50px;height:50px;object-fit:cover;border:1px solid #ccc;">';
+                            } else if (cell) {
+                                cell.textContent = 'No Image';
+                            }
+                        });
+                    }
+                }
+            }
+        ]
+    });
 });
 </script>
