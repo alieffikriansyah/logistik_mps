@@ -7,6 +7,7 @@
                     Data Jenis
                 </h4>
             </div>
+            <?php if (is_admin()) : ?>
             <div class="col-auto">
                 <a href="<?= base_url('jenis/add') ?>" class="btn btn-sm btn-primary btn-icon-split">
                     <span class="icon">
@@ -17,6 +18,7 @@
                     </span>
                 </a>
             </div>
+            <?php endif; ?>
         </div>
     </div>
     <div class="table-responsive">
@@ -25,7 +27,9 @@
                 <tr>
                     <th>No. </th>
                     <th>Nama Jenis</th>
-                    <th>Aksi</th>
+                    <?php if (is_admin()) : ?>
+                        <th>Aksi</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -37,15 +41,17 @@
                         <tr>
                             <td><?= $no++; ?></td>
                             <td><?= $j['nama_jenis']; ?></td>
+                            <?php if (is_admin()) : ?>
                             <td>
                                 <a href="<?= base_url('jenis/edit/') . $j['id_jenis'] ?>" class="btn btn-warning btn-circle btn-sm"><i class="fa fa-edit"></i></a>
                                 <a onclick="return confirm('Yakin ingin hapus?')" href="<?= base_url('jenis/delete/') . $j['id_jenis'] ?>" class="btn btn-danger btn-circle btn-sm"><i class="fa fa-trash"></i></a>
                             </td>
+                            <?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="3" class="text-center">
+                        <td colspan="<?= is_admin() ? 3 : 2; ?>" class="text-center">
                             Data Kosong
                         </td>
                     </tr>

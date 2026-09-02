@@ -30,6 +30,20 @@
                         <?= form_error('username', '<span class="text-danger small">', '</span>'); ?>
                     </div>
                 </div>
+                <div class="row form-group">
+                    <label class="col-md-4 text-md-right" for="password">Password Baru</label>
+                    <div class="col-md-6">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Password Baru (Kosongkan jika tidak diubah)">
+                        <?= form_error('password', '<span class="text-danger small">', '</span>'); ?>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-4 text-md-right" for="password2">Konfirmasi Password</label>
+                    <div class="col-md-6">
+                        <input type="password" id="password2" name="password2" class="form-control" placeholder="Konfirmasi Password Baru">
+                        <?= form_error('password2', '<span class="text-danger small">', '</span>'); ?>
+                    </div>
+                </div>
                 <hr>
                 <div class="row form-group">
                     <label class="col-md-4 text-md-right" for="nama">Nama</label>

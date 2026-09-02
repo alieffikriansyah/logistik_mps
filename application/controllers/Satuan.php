@@ -26,6 +26,10 @@ class Satuan extends CI_Controller
 
     public function add()
     {
+        if (!is_admin()) {
+            redirect('satuan');
+        }
+
         $this->_validasi();
 
         if ($this->form_validation->run() == false) {
@@ -46,6 +50,10 @@ class Satuan extends CI_Controller
 
     public function edit($getId)
     {
+        if (!is_admin()) {
+            redirect('satuan');
+        }
+
         $id = encode_php_tags($getId);
         $this->_validasi();
 
@@ -68,6 +76,10 @@ class Satuan extends CI_Controller
 
     public function delete($getId)
     {
+        if (!is_admin()) {
+            redirect('satuan');
+        }
+
         $id = encode_php_tags($getId);
         if ($this->admin->delete('satuan', 'id_satuan', $id)) {
             set_pesan('data berhasil dihapus.');

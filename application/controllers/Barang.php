@@ -29,17 +29,56 @@ class Barang extends CI_Controller
         $this->template->load('templates/dashboard', 'barang/data', $data);
     }
 
+    public function stok_minimum()
+    {
+        $data['title'] = "Barang Kurang Stok";
+        
+        // Ambil parameter filter dari URL
+        $jenis_filter = $this->input->get('jenis_filter');
+        
+        // Get data barang yang kurang dari atau sama dengan stok minimum
+        $data['barang'] = $this->admin->getBarangKurangStok($jenis_filter);
+        
+        // Get data jenis untuk dropdown filter
+        $data['jenis'] = $this->admin->get('jenis');
+        $data['selected_jenis'] = $jenis_filter;
+        
+        $this->template->load('templates/dashboard', 'barang/stok_minimum', $data);
+    }
+
+    public function export_excel_stok_minimum()
+    {
+        $jenis_filter = $this->input->get('jenis_filter');
+        $data['barang'] = $this->admin->getBarangKurangStok($jenis_filter);
+        $data['selected_jenis'] = $jenis_filter;
+
+        $filename = "Data_Barang_Kurang_Stok_" . date('Ymd_His') . ".xls";
+
+        header("Content-Type: application/vnd.ms-excel; charset=utf-8");
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Cache-Control: max-age=0");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $this->load->view('barang/export_excel', $data);
+    }
+
     private function _validasi()
     {
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required|trim');
         $this->form_validation->set_rules('jenis_id', 'Jenis Barang', 'required');
         $this->form_validation->set_rules('satuan_id', 'Satuan Barang', 'required');
+        $this->form_validation->set_rules('stok_minimum', 'Stok Minimum', 'required|numeric|trim');
         $this->form_validation->set_rules('merk', 'Merk', 'trim|max_length[100]');
         $this->form_validation->set_rules('lokasi', 'Lokasi', 'trim|max_length[100]');
     }
 
     public function add()
     {
+        if (!is_admin()) {
+            redirect('barang');
+        }
+
         $this->_validasi();
 
         if ($this->form_validation->run() == false) {
@@ -67,6 +106,7 @@ class Barang extends CI_Controller
             }
             
             // Set default value jika kosong
+            $input['stok_minimum'] = isset($input['stok_minimum']) ? (int)$input['stok_minimum'] : 0;
             $input['merk'] = !empty($input['merk']) ? $input['merk'] : '';
             $input['lokasi'] = !empty($input['lokasi']) ? $input['lokasi'] : '';
             
@@ -125,6 +165,10 @@ class Barang extends CI_Controller
 
     public function edit($getId)
     {
+        if (!is_admin()) {
+            redirect('barang');
+        }
+
         $id = encode_php_tags($getId);
         $this->_validasi();
 
@@ -164,6 +208,7 @@ class Barang extends CI_Controller
             }
             
             // Set default value jika kosong
+            $input['stok_minimum'] = isset($input['stok_minimum']) ? (int)$input['stok_minimum'] : 0;
             $input['merk'] = !empty($input['merk']) ? $input['merk'] : '';
             $input['lokasi'] = !empty($input['lokasi']) ? $input['lokasi'] : '';
 
@@ -181,6 +226,10 @@ class Barang extends CI_Controller
 
     public function delete($getId)
     {
+        if (!is_admin()) {
+            redirect('barang');
+        }
+
         $id = encode_php_tags($getId);
         
         // Hapus foto barang jika ada

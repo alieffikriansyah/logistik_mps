@@ -26,6 +26,10 @@ class Jenis extends CI_Controller
 
     public function add()
     {
+        if (!is_admin()) {
+            redirect('jenis');
+        }
+
         $this->_validasi();
 
         if ($this->form_validation->run() == false) {
@@ -46,6 +50,10 @@ class Jenis extends CI_Controller
 
     public function edit($getId)
     {
+        if (!is_admin()) {
+            redirect('jenis');
+        }
+
         $id = encode_php_tags($getId);
         $this->_validasi();
 
@@ -68,6 +76,10 @@ class Jenis extends CI_Controller
 
     public function delete($getId)
     {
+        if (!is_admin()) {
+            redirect('jenis');
+        }
+
         $id = encode_php_tags($getId);
         if ($this->admin->delete('jenis', 'id_jenis', $id)) {
             set_pesan('data berhasil dihapus.');

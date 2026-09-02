@@ -44,6 +44,11 @@ $uniq_email = isset($db['email']) && $db['email'] == $email ? '' : '|is_unique[u
 
             $this->form_validation->set_rules('username', 'Username', 'required|trim|alpha_numeric' . $uniq_username);
             $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email' . $uniq_email);
+
+            if (!empty($this->input->post('password'))) {
+                $this->form_validation->set_rules('password', 'Password', 'required|min_length[3]|trim');
+                $this->form_validation->set_rules('password2', 'Konfirmasi Password', 'required|matches[password]|trim');
+            }
         }
     }
 
@@ -95,6 +100,10 @@ $uniq_email = isset($db['email']) && $db['email'] == $email ? '' : '|is_unique[u
                 'no_telp'       => $input['no_telp'],
                 'role'          => $input['role']
             ];
+
+            if (!empty($input['password'])) {
+                $input_data['password'] = password_hash($input['password'], PASSWORD_DEFAULT);
+            }
 
             if ($this->admin->update('user', 'id_user', $id, $input_data)) {
                 set_pesan('data berhasil diubah.');

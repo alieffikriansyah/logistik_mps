@@ -96,6 +96,15 @@
                         <?= form_error('satuan_id', '<small class="text-danger">', '</small>'); ?>
                     </div>
                 </div>
+
+                <div class="row form-group">
+                    <label class="col-md-3 text-md-right" for="stok_minimum">Stok Minimum <span class="text-danger">*</span></label>
+                    <div class="col-md-9">
+                        <input value="<?= set_value('stok_minimum', 0); ?>" name="stok_minimum" id="stok_minimum" type="number" min="0" class="form-control" placeholder="Masukkan batas minimum stok...">
+                        <small class="form-text text-muted">Peringatan stok menipis jika stok barang mencapai atau di bawah angka ini</small>
+                        <?= form_error('stok_minimum', '<small class="text-danger">', '</small>'); ?>
+                    </div>
+                </div>
                 
                 <div class="row form-group">
                     <label class="col-md-3 text-md-right" for="foto_barang">Foto Barang</label>

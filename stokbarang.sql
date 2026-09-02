@@ -32,6 +32,7 @@ CREATE TABLE `barang` (
   `id_barang` char(7) NOT NULL,
   `nama_barang` varchar(255) NOT NULL,
   `stok` int(11) NOT NULL,
+  `stok_minimum` int(11) NOT NULL DEFAULT '0',
   `satuan_id` int(11) NOT NULL,
   `jenis_id` int(11) NOT NULL,
   `foto_barang` text,
@@ -43,9 +44,9 @@ CREATE TABLE `barang` (
 -- Dumping data for table `barang`
 --
 
-INSERT INTO `barang` (`id_barang`, `nama_barang`, `stok`, `satuan_id`, `jenis_id`, `foto_barang`, `merk`, `lokasi`) VALUES
-('B000001', 'tes', 99, 5, 8, 'echarts.png', 'ciptaan tuhan', 'mps'),
-('B000002', 'tes2', 10, 5, 9, 'CONTOH.jpg', 'effweqwe', 'mps');
+INSERT INTO `barang` (`id_barang`, `nama_barang`, `stok`, `stok_minimum`, `satuan_id`, `jenis_id`, `foto_barang`, `merk`, `lokasi`) VALUES
+('B000001', 'tes', 99, 10, 5, 8, 'echarts.png', 'ciptaan tuhan', 'mps'),
+('B000002', 'tes2', 10, 5, 5, 9, 'CONTOH.jpg', 'effweqwe', 'mps');
 
 -- --------------------------------------------------------
 

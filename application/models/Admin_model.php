@@ -125,6 +125,29 @@ class Admin_model extends CI_Model
         return $this->db->get($table)->result_array();
     }
 
+    public function getBarangMin()
+    {
+        $this->db->where('stok <= stok_minimum', NULL, FALSE);
+        $this->db->where('stok_minimum >', 0);
+        return $this->db->get('barang')->result_array();
+    }
+
+    public function getBarangKurangStok($jenis_filter = null)
+    {
+        $this->db->select('b.*, j.nama_jenis, s.nama_satuan');
+        $this->db->from('barang b');
+        $this->db->join('jenis j', 'b.jenis_id = j.id_jenis');
+        $this->db->join('satuan s', 'b.satuan_id = s.id_satuan');
+        $this->db->where('b.stok <= b.stok_minimum', NULL, FALSE);
+        
+        if (!empty($jenis_filter)) {
+            $this->db->where('j.nama_jenis', $jenis_filter);
+        }
+        
+        $this->db->order_by('b.stok', 'ASC');
+        return $this->db->get()->result_array();
+    }
+
     public function chartBarangMasuk($bulan)
     {
         $like = 'T-BM-' . date('y') . $bulan;
