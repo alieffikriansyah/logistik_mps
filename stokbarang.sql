@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 21, 2026 at 06:05 AM
+-- Generation Time: Sep 04, 2026 at 12:30 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 7.3.0
 
@@ -45,8 +45,9 @@ CREATE TABLE `barang` (
 --
 
 INSERT INTO `barang` (`id_barang`, `nama_barang`, `stok`, `stok_minimum`, `satuan_id`, `jenis_id`, `foto_barang`, `merk`, `lokasi`) VALUES
-('B000001', 'tes', 99, 10, 5, 8, 'echarts.png', 'ciptaan tuhan', 'mps'),
-('B000002', 'tes2', 10, 5, 5, 9, 'CONTOH.jpg', 'effweqwe', 'mps');
+('B000001', 'tes', 99, 0, 5, 8, 'echarts.png', 'ciptaan tuhan', 'mps'),
+('B000002', 'tes2', 10, 11, 5, 9, 'CONTOH.jpg', 'effweqwe', 'mps'),
+('B000003', 'WIPOL KARBOL CEMARA 1500ML', 0, 0, 5, 8, 'wipol_1500ml.jpg', 'WIPOL', 'Gudang Consumable Office MPS');
 
 -- --------------------------------------------------------
 
@@ -338,7 +339,7 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id_user`, `nama`, `username`, `email`, `no_telp`, `role`, `password`, `created_at`, `foto`, `is_active`) VALUES
 (1, 'Adminisitrator', 'admin', 'admin@admin.com', '025123456789', 'admin', '$2y$10$wMgi9s3FEDEPEU6dEmbp8eAAEBUXIXUy3np3ND2Oih.MOY.q/Kpoy', 1568689561, 'avatar-1.png', 1),
 (14, 'Gudang', 'gudang', 'gudang@gmail.com', '08123456789', 'gudang', '$2y$10$L6To3cHXsWJzynHO7FhwieJa3njAHz5jCTmigyynaeagmIZuYfJXe', 1700112252, 'avatar-2.png', 1),
-(15, 'unithvmv', 'unithvmv', 'hvmv@gmail.com', '0859345146', 'hvmv', '$2y$10$mdN5yV029EWoRA4/jFpJm.5f/8UutEuWQTYKArAEggDNS30tMFN.u', 1761062455, 'bc50438f1e37352a27496cb31038e599.png', 1);
+(15, 'unithvmv', 'unithvmv', 'hvmv@gmail.com', '0859345146', 'hvmv', '$2y$10$U/PblglSmAY4Jm5UFP8ndesn/vYN9LtDsWOgkcDGrLr4l9M4ea/uC', 1761062455, 'bc50438f1e37352a27496cb31038e599.png', 1);
 
 --
 -- Indexes for dumped tables
