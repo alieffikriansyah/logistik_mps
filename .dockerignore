@@ -1,0 +1,10 @@
+.git
+.gitignore
+.editorconfig
+*.md
+*.rst
+*.txt
+application.zip
+Dockerfile
+docker-compose.yml
+.dockerignore
