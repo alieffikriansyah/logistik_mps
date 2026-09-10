@@ -31,6 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `barang` (
   `id_barang` char(7) NOT NULL,
   `nama_barang` varchar(255) NOT NULL,
+  `ukuran` text,
   `stok` int(11) NOT NULL,
   `stok_minimum` int(11) NOT NULL DEFAULT '0',
   `satuan_id` int(11) NOT NULL,
@@ -44,10 +45,10 @@ CREATE TABLE `barang` (
 -- Dumping data for table `barang`
 --
 
-INSERT INTO `barang` (`id_barang`, `nama_barang`, `stok`, `stok_minimum`, `satuan_id`, `jenis_id`, `foto_barang`, `merk`, `lokasi`) VALUES
-('B000001', 'tes', 99, 0, 5, 8, 'echarts.png', 'ciptaan tuhan', 'mps'),
-('B000002', 'tes2', 10, 11, 5, 9, 'CONTOH.jpg', 'effweqwe', 'mps'),
-('B000003', 'WIPOL KARBOL CEMARA 1500ML', 0, 0, 5, 8, 'wipol_1500ml.jpg', 'WIPOL', 'Gudang Consumable Office MPS');
+INSERT INTO `barang` (`id_barang`, `nama_barang`, `ukuran`, `stok`, `stok_minimum`, `satuan_id`, `jenis_id`, `foto_barang`, `merk`, `lokasi`) VALUES
+('B000001', 'tes', NULL, 99, 0, 5, 8, 'echarts.png', 'ciptaan tuhan', 'mps'),
+('B000002', 'tes2', NULL, 10, 11, 5, 9, 'CONTOH.jpg', 'effweqwe', 'mps'),
+('B000003', 'WIPOL KARBOL CEMARA 1500ML', '1500ML', 0, 0, 5, 8, 'wipol_1500ml.jpg', 'WIPOL', 'Gudang Consumable Office MPS');
 
 -- --------------------------------------------------------
 
@@ -269,7 +270,18 @@ CREATE TABLE `satuan` (
 --
 
 INSERT INTO `satuan` (`id_satuan`, `nama_satuan`) VALUES
-(5, 'pcs');
+(5, 'pcs'),
+(6, 'Unit'),
+(7, 'Box'),
+(8, 'Dus'),
+(9, 'Pack'),
+(10, 'Roll'),
+(11, 'Botol'),
+(12, 'Kg'),
+(13, 'Meter'),
+(14, 'Liter'),
+(15, 'Set'),
+(16, 'Rim');
 
 -- --------------------------------------------------------
 

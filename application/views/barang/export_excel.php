@@ -98,11 +98,12 @@
         <col width="35">   <!-- No. -->
         <col width="90">   <!-- ID Barang -->
         <col width="180">  <!-- Nama Barang -->
+        <col width="100">  <!-- Ukuran -->
+        <col width="70">   <!-- Satuan -->
         <col width="120">  <!-- Merk -->
         <col width="120">  <!-- Jenis Barang -->
         <col width="60">   <!-- Stok -->
         <col width="60">   <!-- Stok Min -->
-        <col width="60">   <!-- Satuan -->
         <col width="120">  <!-- Lokasi -->
         <col width="90">   <!-- Foto Barang -->
         <thead>
@@ -110,11 +111,12 @@
                 <th>No.</th>
                 <th>ID Barang</th>
                 <th>Nama Barang</th>
+                <th>Ukuran</th>
+                <th>Satuan</th>
                 <th>Merk</th>
                 <th>Jenis Barang</th>
                 <th>Stok</th>
                 <th>Stok Min</th>
-                <th>Satuan</th>
                 <th>Lokasi</th>
                 <th>Foto Barang</th>
             </tr>
@@ -133,11 +135,12 @@
                         <td class="text-center"><?= $no++; ?></td>
                         <td class="text-center str-format"><?= $b['id_barang']; ?></td>
                         <td class="text-left"><?= $b['nama_barang']; ?></td>
+                        <td class="text-left"><?= !empty($b['ukuran']) ? $b['ukuran'] : '-'; ?></td>
+                        <td class="text-center"><?= $b['nama_satuan']; ?></td>
                         <td class="text-left"><?= !empty($b['merk']) ? $b['merk'] : '-'; ?></td>
                         <td class="text-left"><?= $b['nama_jenis']; ?></td>
                         <td class="text-center num-format"><?= $b['stok']; ?></td>
                         <td class="text-center num-format"><?= $b['stok_minimum']; ?></td>
-                        <td class="text-center"><?= $b['nama_satuan']; ?></td>
                         <td class="text-left"><?= !empty($b['lokasi']) ? $b['lokasi'] : '-'; ?></td>
                         <td class="img-cell">
                             <?php if ($has_foto) : ?>
@@ -150,7 +153,7 @@
                 <?php endforeach; ?>
             <?php else : ?>
                 <tr>
-                    <td colspan="10" class="text-center" style="height: 30pt; color: #999999;">Data tidak ditemukan</td>
+                    <td colspan="11" class="text-center" style="height: 30pt; color: #999999;">Data tidak ditemukan</td>
                 </tr>
             <?php endif; ?>
         </tbody>

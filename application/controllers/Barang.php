@@ -69,6 +69,7 @@ class Barang extends CI_Controller
         $this->form_validation->set_rules('jenis_id', 'Jenis Barang', 'required');
         $this->form_validation->set_rules('satuan_id', 'Satuan Barang', 'required');
         $this->form_validation->set_rules('stok_minimum', 'Stok Minimum', 'required|numeric|trim');
+        $this->form_validation->set_rules('ukuran', 'Ukuran', 'trim');
         $this->form_validation->set_rules('merk', 'Merk', 'trim|max_length[100]');
         $this->form_validation->set_rules('lokasi', 'Lokasi', 'trim|max_length[100]');
     }
@@ -107,6 +108,7 @@ class Barang extends CI_Controller
             
             // Set default value jika kosong
             $input['stok_minimum'] = isset($input['stok_minimum']) ? (int)$input['stok_minimum'] : 0;
+            $input['ukuran'] = !empty($input['ukuran']) ? $input['ukuran'] : '';
             $input['merk'] = !empty($input['merk']) ? $input['merk'] : '';
             $input['lokasi'] = !empty($input['lokasi']) ? $input['lokasi'] : '';
             
@@ -209,6 +211,7 @@ class Barang extends CI_Controller
             
             // Set default value jika kosong
             $input['stok_minimum'] = isset($input['stok_minimum']) ? (int)$input['stok_minimum'] : 0;
+            $input['ukuran'] = !empty($input['ukuran']) ? $input['ukuran'] : '';
             $input['merk'] = !empty($input['merk']) ? $input['merk'] : '';
             $input['lokasi'] = !empty($input['lokasi']) ? $input['lokasi'] : '';
 

@@ -50,11 +50,12 @@
                     <th>No.</th>
                     <th>ID Barang</th>
                     <th>Nama Barang</th>
+                    <th>Ukuran</th>
+                    <th>Satuan</th>
                     <th>Merk</th>
                     <th>Jenis Barang</th>
                     <th>Stok Saat Ini</th>
                     <th>Stok Min</th>
-                    <th>Satuan</th>
                     <th>Lokasi</th>
                     <th>Foto Barang</th>
                     <?php if (is_admin()) : ?>
@@ -72,6 +73,8 @@
                             <td><?= $no++; ?></td>
                             <td><?= $b['id_barang']; ?></td>
                             <td class="font-weight-bold text-dark"><?= $b['nama_barang']; ?></td>
+                            <td><?= !empty($b['ukuran']) ? $b['ukuran'] : '-' ?></td>
+                            <td><?= $b['nama_satuan']; ?></td>
                             <td><?= !empty($b['merk']) ? $b['merk'] : '-' ?></td>
                             <td><?= $b['nama_jenis']; ?></td>
                             <td>
@@ -80,14 +83,13 @@
                                 </span>
                             </td>
                             <td><span class="badge badge-secondary p-2"><?= $b['stok_minimum']; ?></span></td>
-                            <td><?= $b['nama_satuan']; ?></td>
                             <td><?= !empty($b['lokasi']) ? $b['lokasi'] : '-' ?></td>
                             <td class="text-center">
                                 <?php if (!empty($b['foto_barang']) && file_exists(FCPATH . 'assets/uploads/fotobarang/' . $b['foto_barang'])) : ?>
                                     <img src="<?= base_url('assets/uploads/fotobarang/' . $b['foto_barang']); ?>" 
                                         alt="Foto <?= $b['nama_barang']; ?>" 
                                         class="img-thumbnail" 
-                                        style="width: 60px; height: 60px; object-fit: cover;"
+                                        style="width: 60px; height: 60px; object-fit: cover;" 
                                         title="<?= $b['foto_barang']; ?>"
                                         crossorigin="anonymous"
                                         data-fullpath="<?= base_url('assets/uploads/fotobarang/' . $b['foto_barang']); ?>">
@@ -110,7 +112,7 @@
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="<?= is_admin() ? 11 : 10; ?>" class="text-center py-4 text-muted">
+                        <td colspan="<?= is_admin() ? 12 : 11; ?>" class="text-center py-4 text-muted">
                             <i class="fas fa-check-circle text-success fa-2x mb-2 d-block"></i>
                             Semua stok barang aman (tidak ada yang di bawah stok minimum).
                         </td>
@@ -216,12 +218,12 @@ $(document).ready(function () {
             {
                 extend: 'copyHtml5',
                 text: 'Copy',
-                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] }
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] }
             },
             {
                 extend: 'csvHtml5',
                 text: 'CSV',
-                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] }
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] }
             },
             {
                 text: '<i class="fa fa-file-excel"></i> Excel',
@@ -236,13 +238,13 @@ $(document).ready(function () {
                 text: 'PDF',
                 orientation: 'landscape',
                 pageSize: 'A4',
-                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
                 customize: function (doc) {
                     doc.defaultStyle.fontSize = 8;
                     doc.styles.tableHeader.fontSize = 9;
 
                     var tableBody = doc.content[1].table.body;
-                    var fotoColIndex = 9;
+                    var fotoColIndex = 10;
                     var bodyRows = document.querySelectorAll('#dataTable tbody tr');
 
                     for (var i = 1; i < tableBody.length; i++) {
@@ -250,7 +252,7 @@ $(document).ready(function () {
                         if (!trEl) continue;
 
                         var tdList = trEl.querySelectorAll('td');
-                        var imgEl = tdList[9] ? tdList[9].querySelector('img') : null;
+                        var imgEl = tdList[10] ? tdList[10].querySelector('img') : null;
                         var base64 = getBase64FromImg(imgEl);
 
                         tableBody[i][fotoColIndex] = base64
@@ -258,17 +260,17 @@ $(document).ready(function () {
                             : { text: 'No Image', italics: true, color: '#999999', fontSize: 7 };
                     }
 
-                    doc.content[1].table.widths = ['3%', '9%', '16%', '11%', '11%', '6%', '6%', '6%', '11%', '9%'];
+                    doc.content[1].table.widths = ['3%', '8%', '14%', '6%', '8%', '10%', '10%', '5%', '5%', '10%', '8%'];
                 }
             },
             {
                 extend: 'print',
                 text: 'Print',
-                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
                 customize: function (win) {
                     var sources = [];
                     document.querySelectorAll('#dataTable tbody tr').forEach(function (tr) {
-                        var img = tr.querySelectorAll('td')[9] ? tr.querySelectorAll('td')[9].querySelector('img') : null;
+                        var img = tr.querySelectorAll('td')[10] ? tr.querySelectorAll('td')[10].querySelector('img') : null;
                         sources.push(img ? img.getAttribute('data-fullpath') : null);
                     });
 

@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `barang` (
   `id_barang` char(7) NOT NULL,
   `nama_barang` varchar(255) NOT NULL,
+  `ukuran` text,
   `stok` int(11) NOT NULL,
   `satuan_id` int(11) NOT NULL,
   `jenis_id` int(11) NOT NULL
@@ -101,6 +102,24 @@ CREATE TABLE `satuan` (
   `id_satuan` int(11) NOT NULL,
   `nama_satuan` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `satuan`
+--
+
+INSERT INTO `satuan` (`id_satuan`, `nama_satuan`) VALUES
+(5, 'pcs'),
+(6, 'Unit'),
+(7, 'Box'),
+(8, 'Dus'),
+(9, 'Pack'),
+(10, 'Roll'),
+(11, 'Botol'),
+(12, 'Kg'),
+(13, 'Meter'),
+(14, 'Liter'),
+(15, 'Set'),
+(16, 'Rim');
 
 -- --------------------------------------------------------
 

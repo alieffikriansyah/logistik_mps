@@ -52,11 +52,12 @@
                     <th>No.</th>
                     <th>ID Barang</th>
                     <th>Nama Barang</th>
+                    <th>Ukuran</th>
+                    <th>Satuan</th>
                     <th>Merk</th>
                     <th>Jenis Barang</th>
                     <th>Stok</th>
                     <th>Stok Min</th>
-                    <th>Satuan</th>
                     <th>Lokasi</th>
                     <th>Foto Barang</th>
                     <?php if (is_admin()): ?>
@@ -74,6 +75,8 @@
                             <td><?= $no++; ?></td>
                             <td><?= $b['id_barang']; ?></td>
                             <td><?= $b['nama_barang']; ?></td>
+                            <td><?= !empty($b['ukuran']) ? $b['ukuran'] : '-' ?></td>
+                            <td><?= $b['nama_satuan']; ?></td>
                             <td><?= !empty($b['merk']) ? $b['merk'] : '-' ?></td>
                             <td><?= $b['nama_jenis']; ?></td>
                             <td>
@@ -84,7 +87,6 @@
                                 <?php endif; ?>
                             </td>
                             <td><span class="badge badge-secondary"><?= $b['stok_minimum']; ?></span></td>
-                            <td><?= $b['nama_satuan']; ?></td>
                             <td><?= !empty($b['lokasi']) ? $b['lokasi'] : '-' ?></td>
                             <td class="text-center">
                                 <?php if (!empty($b['foto_barang']) && file_exists(FCPATH . 'assets/uploads/fotobarang/' . $b['foto_barang'])): ?>
@@ -114,7 +116,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="<?= is_admin() ? 11 : 10; ?>" class="text-center">
+                        <td colspan="<?= is_admin() ? 12 : 11; ?>" class="text-center">
                             Data Kosong
                         </td>
                     </tr>
@@ -225,8 +227,8 @@
 
     $(document).ready(function () {
         // Kolom (index dari 0):
-        // 0 No | 1 ID Barang | 2 Nama Barang | 3 Merk | 4 Jenis Barang
-        // 5 Stok | 6 Stok Min | 7 Satuan | 8 Lokasi | 9 Foto Barang | 10 Aksi
+        // 0 No | 1 ID Barang | 2 Nama Barang | 3 Ukuran | 4 Satuan | 5 Merk | 6 Jenis Barang
+        // 7 Stok | 8 Stok Min | 9 Lokasi | 10 Foto Barang | 11 Aksi
 
         // Cegah popup "Cannot reinitialise DataTable" kalau elemen #dataTable
         // sudah pernah di-init sebelumnya (misal oleh script lain di layout/footer)
@@ -246,12 +248,12 @@
                 {
                     extend: 'copyHtml5',
                     text: 'Copy',
-                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] } // teks saja, tanpa Foto & Aksi
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] } // teks saja, tanpa Foto & Aksi
                 },
                 {
                     extend: 'csvHtml5',
                     text: 'CSV',
-                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] }
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] }
                 },
                 {
                     text: '<i class="fa fa-file-excel"></i> Excel',
@@ -266,13 +268,13 @@
                     text: 'PDF',
                     orientation: 'landscape',
                     pageSize: 'A4',
-                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] }, // Foto ikut, Aksi tidak
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }, // Foto ikut, Aksi tidak
                     customize: function (doc) {
                         doc.defaultStyle.fontSize = 8;
                         doc.styles.tableHeader.fontSize = 9;
 
                         var tableBody = doc.content[1].table.body;
-                        var fotoColIndex = 9; // posisi kolom Foto di hasil export
+                        var fotoColIndex = 10; // posisi kolom Foto di hasil export
                         var bodyRows = document.querySelectorAll('#dataTable tbody tr');
 
                         for (var i = 1; i < tableBody.length; i++) {
@@ -280,7 +282,7 @@
                             if (!trEl) continue;
 
                             var tdList = trEl.querySelectorAll('td');
-                            var imgEl = tdList[9] ? tdList[9].querySelector('img') : null;
+                            var imgEl = tdList[10] ? tdList[10].querySelector('img') : null;
                             var base64 = getBase64FromImg(imgEl);
 
                             tableBody[i][fotoColIndex] = base64
@@ -288,18 +290,18 @@
                                 : { text: 'No Image', italics: true, color: '#999999', fontSize: 7 };
                         }
 
-                        doc.content[1].table.widths = ['3%', '9%', '16%', '11%', '11%', '5%', '6%', '6%', '11%', '9%'];
+                        doc.content[1].table.widths = ['3%', '8%', '14%', '6%', '8%', '10%', '10%', '5%', '5%', '10%', '8%'];
                     }
                 },
                 {
                     extend: 'print',
                     text: 'Print',
-                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] }, // Foto ikut, Aksi tidak
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }, // Foto ikut, Aksi tidak
                     customize: function (win) {
                         // Ambil semua src foto dari tabel asli (urutan baris sama dengan yang tampil)
                         var sources = [];
                         document.querySelectorAll('#dataTable tbody tr').forEach(function (tr) {
-                            var img = tr.querySelectorAll('td')[9] ? tr.querySelectorAll('td')[9].querySelector('img') : null;
+                            var img = tr.querySelectorAll('td')[10] ? tr.querySelectorAll('td')[10].querySelector('img') : null;
                             sources.push(img ? img.getAttribute('data-fullpath') : null);
                         });
 

@@ -40,6 +40,34 @@
                         <?= form_error('nama_barang', '<small class="text-danger">', '</small>'); ?>
                     </div>
                 </div>
+
+                <div class="row form-group">
+                    <label class="col-md-3 text-md-right" for="ukuran">Ukuran</label>
+                    <div class="col-md-9">
+                        <input value="<?= set_value('ukuran', $barang['ukuran']); ?>" name="ukuran" id="ukuran" type="text" class="form-control" placeholder="Masukkan ukuran barang (contoh: 1500ML, XL, 10x10, dsb)...">
+                        <?= form_error('ukuran', '<small class="text-danger">', '</small>'); ?>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <label class="col-md-3 text-md-right" for="satuan_id">Satuan Barang <span class="text-danger">*</span></label>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <select name="satuan_id" id="satuan_id" class="custom-select">
+                                <option value="" disabled>Pilih Satuan Barang</option>
+                                <?php foreach ($satuan as $s) : ?>
+                                    <option <?= set_select('satuan_id', $s['id_satuan'], ($barang['satuan_id'] == $s['id_satuan'])); ?> value="<?= $s['id_satuan'] ?>"><?= $s['nama_satuan'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <div class="input-group-append">
+                                <a class="btn btn-outline-primary" href="<?= base_url('satuan/add'); ?>" target="_blank" title="Tambah Satuan Baru">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <?= form_error('satuan_id', '<small class="text-danger">', '</small>'); ?>
+                    </div>
+                </div>
                 
                 <div class="row form-group">
                     <label class="col-md-3 text-md-right" for="merk">Merk</label>
@@ -74,26 +102,6 @@
                             </div>
                         </div>
                         <?= form_error('jenis_id', '<small class="text-danger">', '</small>'); ?>
-                    </div>
-                </div>
-                
-                <div class="row form-group">
-                    <label class="col-md-3 text-md-right" for="satuan_id">Satuan Barang <span class="text-danger">*</span></label>
-                    <div class="col-md-9">
-                        <div class="input-group">
-                            <select name="satuan_id" id="satuan_id" class="custom-select">
-                                <option value="" disabled>Pilih Satuan Barang</option>
-                                <?php foreach ($satuan as $s) : ?>
-                                    <option <?= set_select('satuan_id', $s['id_satuan'], ($barang['satuan_id'] == $s['id_satuan'])); ?> value="<?= $s['id_satuan'] ?>"><?= $s['nama_satuan'] ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <div class="input-group-append">
-                                <a class="btn btn-outline-primary" href="<?= base_url('satuan/add'); ?>" target="_blank" title="Tambah Satuan Baru">
-                                    <i class="fa fa-plus"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <?= form_error('satuan_id', '<small class="text-danger">', '</small>'); ?>
                     </div>
                 </div>
                 
