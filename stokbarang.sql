@@ -241,8 +241,27 @@ CREATE TABLE `material_request` (
   `id_user` int(11) DEFAULT NULL,
   `realisasi` int(11) DEFAULT NULL,
   `tanggal` date DEFAULT NULL,
-  `barang_minta` text
+  `barang_minta` text,
+  `keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `file_material_request`
+--
+
+CREATE TABLE IF NOT EXISTS `file_material_request` (
+  `id_file_mr` int(11) NOT NULL AUTO_INCREMENT,
+  `id_mr` int(11) NOT NULL,
+  `nama_file` varchar(255) NOT NULL,
+  `nama_asli` varchar(255) DEFAULT NULL,
+  `tipe_file` varchar(50) DEFAULT NULL,
+  `ukuran_file` float DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_file_mr`),
+  KEY `id_mr` (`id_mr`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `material_request`
